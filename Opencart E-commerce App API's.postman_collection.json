@@ -1,0 +1,668 @@
+{
+	"info": {
+		"_postman_id": "abad96bd-2f0f-416d-bc7b-10b26c6d6747",
+		"name": "Opencart E-commerce App API's",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32483479"
+	},
+	"item": [
+		{
+			"name": "Token Creation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//capturing response from response body \r",
+							"var jsonData=pm.response.json()\r",
+							"\r",
+							"//validating response data\r",
+							"pm.test(\"checking success msg in response\",()=>{\r",
+							"    pm.expect(jsonData.success).to.eql(\"Success: API session successfully started!\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//creating collection variable to store api token\r",
+							"pm.collectionVariables.set(\"api_token_value\",jsonData.api_token);\r",
+							"\r",
+							"//validating status code\r",
+							"pm.test(\"status code is 200\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//validating cookies\r",
+							"pm.test(\"OCSESSID Cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"OCSESSID\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"currency Cookie is  present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"currency\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"currency Cookie has value USD\",()=>{\r",
+							"    pm.expect(pm.cookies.get(\"currency\")).to.equal(\"USD\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"language cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"language\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"laguage cookie has value en-gb\",()=>{\r",
+							"    pm.expect(pm.cookies.get(\"language\")).to.equal(\"en-gb\");\r",
+							"});\r",
+							"\r",
+							"//validating headers\r",
+							"pm.test(\"Date header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Date\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"server header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"server\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"X-Powered-By header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"X-Powered-By\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Set-Cookie header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Set-Cookie\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Length header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Length\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Keep-Alive header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Keep-Alive\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Connection is header present\",()=>{\r",
+							"    pm.response.to.have.header(\"Connection\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"//validating reponse time\r",
+							"pm.test(\"reponse is less 200ms\",()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "demo",
+							"description": "Get it from opencart.",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "qP6yiZ2HUJcQc6263VTxEk1GqjI34h0WZKtmUd4A3ke6XuapIr6tmF0gGAfWM0UoznxFQJBogGOg55dpNgAniQhYiNxx1ZAgC0CYs6cZKUS2tJFgML2mZm3Kt6oJm3364yCioUZN7GT1h1QZtIjH6Gv4ofClCRTIzU7PDi0OtS35zz8R6LNN6SLrny2plzqTQ8bRMQTojXHkQBDJHexCeFQcwaE5CD5x4gVOxD5NHbifab5OXQbHP8Y7HaSCAgpv",
+							"description": "Get it from opencart.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}api/login",
+					"host": [
+						"{{base_url}}api"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Product To Cart",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"product_id\",\"40\");\r",
+							"pm.collectionVariables.set(\"quantity\",\"10\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"//Validating Response Data\r",
+							"pm.test('checking success msg in response', function () {\r",
+							"    pm.expect(jsonData.success).to.equal('Success: You have modified your shopping cart!');\r",
+							"})\r",
+							"\r",
+							"//Validating Cookies\r",
+							"pm.test(\"OCSESSID cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"OCSESSID\")).to.be.true;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"currency cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"currency\")).to.be.true;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"language cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"language\")).to.be.true;\r",
+							"})\r",
+							"\r",
+							"//Validating Headers\r",
+							" pm.test(\"X-Powered-By header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"X-Powered-By\");\r",
+							" });\r",
+							"\r",
+							" pm.test(\"Content-Length is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Length\");\r",
+							" });\r",
+							"\r",
+							"pm.test(\"Keep-Alive header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Keep-Alive\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Connection header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Connection\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"//validating Status Code\r",
+							"pm.test(\"Status Code is 200\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Validating Response Time \r",
+							"pm.test(\"Response is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api token",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "{{api_token_value}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "product_id",
+							"value": "{{product_id}}",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "{{quantity}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}api/cart/add",
+					"host": [
+						"{{base_url}}api"
+					],
+					"path": [
+						"cart",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Cart Content",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"cart_id_Key\",jsonData.products[0].cart_id);\r",
+							"\r",
+							"//Validating Cookies \r",
+							"pm.test(\"OCSESSID cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"OCSESSID\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"currency cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"currency\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"language cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"language\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"cookie language has value en-gb\",()=>{\r",
+							"    pm.expect(pm.cookies.get(\"language\")).to.eql(\"en-gb\");\r",
+							"});\r",
+							"\r",
+							"//Validating Headers\r",
+							"pm.test(\"Date header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Date\");\r",
+							"});\r",
+							"pm.test(\"server header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Server\");\r",
+							"});\r",
+							"pm.test(\"X-Powered-By header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"X-Powered-By\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Length is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Length\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Keep-Alive header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Keep-Alive\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Connection header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Connection\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"//Validating Status Code \r",
+							"pm.test(\"Status code is 200\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Validating response time\r",
+							"pm.test(\"response time is less than 200ms\",()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api token",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "{{api_token_value}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "product_id",
+							"value": "{{product_id}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}api/cart/products",
+					"host": [
+						"{{base_url}}api"
+					],
+					"path": [
+						"cart",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Cart Content",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//capturing json data \r",
+							"var jsonData=pm.response.json();\r",
+							"\r",
+							"//validating response \r",
+							"pm.test(\"checking the success msg in response\",()=>{\r",
+							"    pm.expect(jsonData.success).to.eql( \"Success: You have modified your shopping cart!\");\r",
+							"});\r",
+							"\r",
+							"//Validating Cookies\r",
+							"pm.test(\"OCSESSID Cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"OCSESSID\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"currency cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"currency\")).to.be.true;\r",
+							"});\r",
+							"pm.test(\"language cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"language\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"//Validating Headers\r",
+							"pm.test(\"Date header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Date\");\r",
+							"});\r",
+							"pm.test(\"Server header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Server\");\r",
+							"});\r",
+							"pm.test(\"X-Powered-By header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"X-Powered-By\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Length is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Length\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Keep-Alive header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Keep-Alive\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Connection header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Connection\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"//Validating Status Code\r",
+							"pm.test(\"status code is 200\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Validating response time\r",
+							"pm.test(\"response time is less than 200ms\",()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api token",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "{{api_token_value}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "key",
+							"value": "{{cart_id_Key}}",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}api/cart/edit",
+					"host": [
+						"{{base_url}}api"
+					],
+					"path": [
+						"cart",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Cart Content",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=pm.response.json();\r",
+							"pm.test(\"checking success msg responseBody\",()=>{\r",
+							"    pm.expect(jsonData.success).to.eql(\"Success: You have modified your shopping cart!\");\r",
+							"});\r",
+							"\r",
+							"//Validating Cookies\r",
+							"pm.test(\"OCSESSID cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"OCSESSID\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"currency cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"currency\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"language cookie is present\",()=>{\r",
+							"    pm.expect(pm.cookies.has(\"language\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"//Validating Headers\r",
+							"pm.test(\"Date header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Date\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"server header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Server\");\r",
+							"});\r",
+							"pm.test(\"X-Powered-By header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"X-Powered-By\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Length is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Length\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Keep-Alive header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Keep-Alive\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Connection header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Connection\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\",()=>{\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"//Validating status code \r",
+							"pm.test(\"status code is 200\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Validating response time \r",
+							"pm.test(\"response time is less than 200ms\",()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"//unset variables\r",
+							"pm.collectionVariables.unset(\"api_token_value\");\r",
+							"pm.collectionVariables.unset(\"product_id\");\r",
+							"pm.collectionVariables.unset(\"quantity\");\r",
+							"pm.collectionVariables.unset(\"cart_id_Key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api token",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "{{api_token_value}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "key",
+							"value": "{{cart_id_Key}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}api/cart/remove",
+					"host": [
+						"{{base_url}}api"
+					],
+					"path": [
+						"cart",
+						"remove"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://{{ip}}/opencart/upload/index.php?route=",
+			"type": "string"
+		},
+		{
+			"key": "ip",
+			"value": "192.168.100.205",
+			"type": "string"
+		}
+	]
+}
